@@ -8,8 +8,8 @@ const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 // ---------- Types ----------
 type Move = {value: number; change: number; changePct?: number; decimals?: number; prefix?: string; suffix?: string};
 type Card =
-  | {type: 'index'; tag: string; title: string; move: Move; note?: string; sec?: number}
-  | {type: 'fx'; tag: string; title: string; move: Move; convertLabel?: string; convertValue?: string; note?: string; sec?: number}
+  | {type: 'index'; tag: string; title: string; move: Move; note?: string; breadth?: {up: number; down: number; flat?: number}; sec?: number}
+  | {type: 'fx'; tag: string; title: string; move: Move; convertLabel?: string; convertValue?: string; note?: string; others?: {label: string; value: string; up?: boolean}[]; sec?: number}
   | {type: 'duo'; tag: string; items: {label: string; unit: string; move: Move}[]; sec?: number}
   | {type: 'story'; tag: string; headline: string; lines: string[]; impact?: string; sec?: number};
 export type MarketData = {
@@ -39,10 +39,11 @@ const Count: React.FC<{m: Move; start: number; size: number; color?: string}> = 
   );
 };
 
-const ChangePill: React.FC<{m: Move; delay: number; size?: number}> = ({m, delay, size = 46}) => {
+const ChangePill: React.FC<{m: Move; delay: number; size?: number; invert?: boolean}> = ({m, delay, size = 46, invert}) => {
   const s = useSpr(delay, 8, 240);
   const up = m.change > 0, flat = m.change === 0;
-  const col = flat ? C.dim : up ? '#2EE59D' : C.red;
+  const good = invert ? !up : up;
+  const col = flat ? C.dim : good ? '#2EE59D' : C.red;
   const arrow = flat ? '■' : up ? '▲' : '▼';
   const dec = m.decimals ?? 2;
   return (
@@ -100,13 +101,51 @@ const Hook: React.FC<{h: MarketData['hook']}> = ({h}) => {
   );
 };
 
+const Breadth: React.FC<{b: {up: number; down: number; flat?: number}; delay: number}> = ({b, delay}) => {
+  const f = useCurrentFrame();
+  const t = interpolate(f - delay, [0, 20], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+  const tot = b.up + b.down + (b.flat ?? 0);
+  const up = (b.up / tot) * 100, down = (b.down / tot) * 100;
+  return (
+    <div style={{position: 'absolute', top: 1270, left: 70, right: 70, opacity: Math.min(1, t * 2)}}>
+      <div style={{display: 'flex', justifyContent: 'space-between', fontFamily: BODY, fontWeight: 900, fontSize: 36}}>
+        <span style={{color: '#2EE59D'}}>▲ {Math.round(b.up * t)} NAIK</span>
+        <span style={{color: C.red}}>{Math.round(b.down * t)} TURUN ▼</span>
+      </div>
+      <div style={{display: 'flex', height: 34, borderRadius: 17, overflow: 'hidden', marginTop: 12, background: 'rgba(255,255,255,0.15)'}}>
+        <div style={{width: `${up * t}%`, background: '#2EE59D'}} />
+        <div style={{flex: 1}} />
+        <div style={{width: `${down * t}%`, background: C.red}} />
+      </div>
+    </div>
+  );
+};
+
+const Others: React.FC<{rows: {label: string; value: string; up?: boolean}[]; delay: number}> = ({rows, delay}) => {
+  const f = useCurrentFrame();
+  return (
+    <div style={{position: 'absolute', top: 1300, left: 70, right: 70, display: 'flex', gap: 18}}>
+      {rows.map((r, i) => {
+        const t = interpolate(f - delay - i * 6, [0, 10], [0, 1], {...clamp, easing: Easing.out(Easing.back(2))});
+        return (
+          <div key={i} style={{flex: 1, padding: '20px 10px', borderRadius: 22, background: 'rgba(255,255,255,0.08)', border: '2px solid rgba(255,255,255,0.14)',
+            textAlign: 'center', transform: `scale(${t})`}}>
+            <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 28, color: C.dim}}>{r.label}</div>
+            <div style={{fontFamily: HEAD, fontSize: 56, color: r.up === undefined ? C.white : r.up ? '#2EE59D' : C.red}}>{r.value}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 const IndexScene: React.FC<{c: Extract<Card, {type: 'index' | 'fx'}>}> = ({c}) => (
   <AbsoluteFill>
     <Head tag={c.tag} title={c.title} />
     <Panel delay={10} top={760}>
       <div style={{textAlign: 'center'}}>
         <Count m={c.move} start={16} size={200} color={C.yellow} />
-        <div style={{marginTop: 26}}><ChangePill m={c.move} delay={36} /></div>
+        <div style={{marginTop: 26}}><ChangePill m={c.move} delay={36} invert={c.type === 'fx'} /></div>
         {c.type === 'fx' && c.convertLabel && (
           <div style={{marginTop: 34, fontFamily: BODY, fontWeight: 800, fontSize: 40, color: C.white}}>
             {c.convertLabel} <span style={{color: C.cyan, fontWeight: 900}}>{c.convertValue}</span>
@@ -114,7 +153,9 @@ const IndexScene: React.FC<{c: Extract<Card, {type: 'index' | 'fx'}>}> = ({c}) =
         )}
       </div>
     </Panel>
-    {c.note && <Note text={c.note} delay={48} />}
+    {c.type === 'index' && c.breadth && <Breadth b={c.breadth} delay={44} />}
+    {c.type === 'fx' && c.others && <Others rows={c.others} delay={44} />}
+    {c.note && <Note text={c.note} delay={56} />}
     <Burst at={38} x={540} y={1000} color={C.cyan} />
   </AbsoluteFill>
 );
@@ -124,9 +165,9 @@ const Note: React.FC<{text: string; delay: number}> = ({text, delay}) => {
   const f = useCurrentFrame();
   if (f < delay) return null;
   return (
-    <div style={{position: 'absolute', top: 1360, left: 70, right: 70, transformOrigin: 'left center', opacity: Math.min(1, s * 2),
+    <div style={{position: 'absolute', top: 1420, left: 70, right: 70, transformOrigin: 'left center', opacity: Math.min(1, s * 2),
       transform: `scale(${interpolate(s, [0, 1], [1.6, 1])}) rotate(${interpolate(s, [0, 1], [-8, -1.5])}deg)`}}>
-      <div style={{fontFamily: BODY, fontWeight: 900, fontSize: 52, lineHeight: 1.15, color: C.white}}>{text}</div>
+      <div style={{fontFamily: BODY, fontWeight: 900, fontSize: 46, lineHeight: 1.15, color: C.white}}>{text}</div>
     </div>
   );
 };
