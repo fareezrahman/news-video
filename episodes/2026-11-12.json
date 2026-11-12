@@ -1,0 +1,82 @@
+{
+  "id": "2026-11-12",
+  "date": "KHAMIS · 12 NOV 2026",
+  "segments": [
+    {
+      "type": "hook",
+      "kicker": "PANAS PAGI NI",
+      "big": "GST",
+      "sub": "TAKKAN DATANG BALIK",
+      "caption": "GST... takkan datang balik. Tu kata Perdana Menteri pagi tadi. Okay jom, 3 berita penting hari ni.",
+      "audio": null,
+      "durationSec": 7.47
+    },
+    {
+      "type": "story",
+      "n": 1,
+      "tag": "EKONOMI",
+      "headline": "GST tak akan dibawa balik",
+      "caption": "Satu. Anwar kata kerajaan tak bercadang bawa balik GST, sebab ia bebankan rakyat, terutama golongan berpendapatan rendah. Bawah SST sekarang, lebih kurang 2,000 barang dikecualikan cukai. Bawah GST dulu, cuma sekitar 750. Maksudnya untuk korang? Buat masa ni, takde GST atas barang harian.",
+      "card": {
+        "kind": "compare",
+        "title": "BARANG DIKECUALIKAN CUKAI",
+        "a": {
+          "label": "SST (SEKARANG)",
+          "value": 2000
+        },
+        "b": {
+          "label": "GST (DULU)",
+          "value": 750
+        }
+      },
+      "impact": "Buat masa ni, takde GST atas barang harian",
+      "audio": null,
+      "durationSec": 22.6
+    },
+    {
+      "type": "story",
+      "n": 2,
+      "tag": "PELABURAN",
+      "headline": "Pelabur Taiwan tak tarik diri",
+      "caption": "Dua. Isu Taiwan. Kerajaan kata pelabur Taiwan tak tarik diri dari Malaysia... malah ada pelaburan baru. Malaysia tetap pegang Dasar Satu China sejak tahun 1974, tapi rundingan pelaburan dengan Taiwan masih diteruskan.",
+      "card": {
+        "kind": "stat",
+        "value": 1974,
+        "label": "DASAR SATU CHINA SEJAK"
+      },
+      "impact": "Rundingan pelaburan masih diteruskan",
+      "audio": null,
+      "durationSec": 17.48
+    },
+    {
+      "type": "story",
+      "n": 3,
+      "tag": "TEKNOLOGI",
+      "headline": "Malaysia ke-27 dunia dalam digital & AI",
+      "caption": "Tiga. Malaysia naik ke tempat ke-27 dunia, dalam ranking digital dan AI IMD. Dalam ASEAN, kita nombor 2... cuma di belakang Singapura.",
+      "card": {
+        "kind": "rank",
+        "value": 27,
+        "label": "IMD WORLD DIGITAL & AI RANKING",
+        "note": "NO. 2 DI ASEAN, SELEPAS SINGAPURA"
+      },
+      "audio": null,
+      "durationSec": 11.0
+    },
+    {
+      "type": "outro",
+      "question": "GST patut balik ke tak?",
+      "caption": "Korang rasa, GST patut balik ke tak? Komen kat bawah. Follow Glance untuk berita padat, setiap pagi.",
+      "audio": null,
+      "durationSec": 7.24
+    }
+  ],
+  "sources": [
+    "RTM: Tidak akan laksana semula GST, bebankan rakyat (12 Nov 2026)",
+    "Utusan Sarawak: Penolakan GST bukan soal politik (12 Nov 2026)",
+    "RTM: Tiada gangguan perdagangan, pelaburan dengan Taiwan (12 Nov 2026)",
+    "TVS: Pelabur Taiwan tidak tarik diri dari Malaysia (12 Nov 2026)",
+    "Bernama: Malaysia rises to 27th in IMD WDAIR 2026 (12 Nov 2026)"
+  ],
+  "brand": "GLANCE"
+}

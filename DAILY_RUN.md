@@ -13,8 +13,16 @@ Goal: a ready-to-post vertical video every morning by about 7:30am Malaysia time
    - Total spoken length about 45-55 seconds.
    - Write numbers as words in the voice script ("dua ribu", "tahun sembilan belas tujuh puluh empat"); the on-screen caption can use digits.
 3. **Voice.** ElevenLabs, model `eleven_v4`, one generation per segment (generations_count 1). Save as `public/<id>/seg0.mp3`, `seg1.mp3`, ... in segment order. Voice: Ashraf `NHFTLozDZneDWyQjRGAO` (proposed default, owner to confirm). Check an estimate first; one episode is about 920 credits (Starter plan: 30k/month).
-4. **Render.** `scripts/render_episode.py episodes/<id>.json` (about 4 minutes). Look at 3-4 frames of the result before delivering: nothing cut off, captions readable, numbers match sources.
-5. **Deliver** to the owner: `out/<id>_phone.mp4` (about 12 MB), plus the caption text, 3-5 hashtags and the source list.
+4. **Render inside the ElevenLabs sandbox** (`creative_execute_sandbox`). The cloud workspace cannot download ElevenLabs audio (elevenlabsusercontent.com and api.elevenlabs.io are blocked), so the final video is built where the audio lives.
+   - Fonts: attach once per flow with `creative_attach_reference_file` from
+     `https://raw.githubusercontent.com/google/fonts/main/ofl/anton/Anton-Regular.ttf` and
+     `https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter%5Bopsz%2Cwght%5D.ttf`
+   - Copy `html/index.html`, `html/app.js` (check md5 after writing), `html/fonts.sandbox.css` (as fonts.css) and an `episode.js` (`window.EP=<episode json>;`) into `/workspace/glance/`, fonts into `/workspace/glance/fonts/`.
+   - Measure each voice clip with ffprobe, set `durationSec`, pad each clip to ceil((dur+0.35)*30)/30 s, concat, loudnorm I=-14.
+   - Each sandbox command is killed after 180 s, and render-html runs ~12 s per second of video. Use size=large and render in parallel pieces: 4 x 9 s pieces per command for the hook/first story, 6 x 4.5 s pieces for later scenes. Then concat pieces + audio, encode H.264 crf 22, faststart.
+   - Check: frame count = total segment frames, loudness about -14 LUFS, both fonts load (probe page).
+   - Local preview (cloud workspace): `chrome-headless-shell --screenshot ... html/index.html#t=<sec>`.
+5. **Deliver** to the owner: the ElevenLabs flow node link of the final MP4 (opens on phone, download from there), plus the caption text, 3-5 hashtags and the source list.
 6. **TikTok caption format:** one hook line, one line of context, "Sumber: <outlets>", hashtags. Remind the owner to switch on the AI-generated content label.
 
 ## Rules
