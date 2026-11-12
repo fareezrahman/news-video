@@ -11,7 +11,7 @@ import '@fontsource/inter/900.css';
 export const FPS = 30;
 
 // ---------- Brand ----------
-const C = {
+export const C = {
   bg1: '#06122B',
   bg2: '#11307A',
   yellow: '#FFD21F',
@@ -21,8 +21,8 @@ const C = {
   ink: '#06122B',
   dim: 'rgba(255,255,255,0.6)',
 };
-const HEAD = 'Anton, Impact, sans-serif';
-const BODY = 'Inter, sans-serif';
+export const HEAD = 'Anton, Impact, sans-serif';
+export const BODY = 'Inter, sans-serif';
 
 // ---------- Types ----------
 type Card =
@@ -48,7 +48,7 @@ export const totalFrames = (d: EpisodeData) => d.segments.reduce((a, s) => a + s
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const fmt = (n: number) => Math.round(n).toLocaleString('en-US');
 
-const useSpr = (delay = 0, damping = 10, stiffness = 200) => {
+export const useSpr = (delay = 0, damping = 10, stiffness = 200) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
   return spring({frame: f - delay, fps, config: {damping, stiffness, mass: 0.7}});
@@ -86,7 +86,7 @@ const Shapes: React.FC = () => {
   return <>{items}</>;
 };
 
-const Background: React.FC = () => {
+export const Background: React.FC = () => {
   const f = useCurrentFrame();
   return (
     <AbsoluteFill style={{background: `radial-gradient(130% 90% at 50% ${30 + Math.sin(f / 50) * 8}%, ${C.bg2} 0%, ${C.bg1} 72%)`, overflow: 'hidden'}}>
@@ -191,7 +191,7 @@ const Captions: React.FC<{text: string; frames: number}> = ({text, frames}) => {
 };
 
 // ---------- Transition: stacked colour bars ----------
-const Wipe: React.FC = () => {
+export const Wipe: React.FC = () => {
   const f = useCurrentFrame();
   if (f > 14) return null;
   const bars = [C.red, C.yellow, C.cyan];
@@ -206,7 +206,7 @@ const Wipe: React.FC = () => {
 };
 
 // ---------- Burst / shockwave ----------
-const Burst: React.FC<{at: number; x: number; y: number; color?: string}> = ({at, x, y, color = C.yellow}) => {
+export const Burst: React.FC<{at: number; x: number; y: number; color?: string}> = ({at, x, y, color = C.yellow}) => {
   const f = useCurrentFrame() - at;
   if (f < 0 || f > 22) return null;
   const r = interpolate(f, [0, 22], [40, 520], {easing: Easing.out(Easing.cubic)});
@@ -226,7 +226,7 @@ const Burst: React.FC<{at: number; x: number; y: number; color?: string}> = ({at
 };
 
 // ---------- Word-stagger headline ----------
-const BounceWords: React.FC<{text: string; delay: number; size: number; color: string; center?: boolean; step?: number}> = ({text, delay, size, color, center, step = 3}) => {
+export const BounceWords: React.FC<{text: string; delay: number; size: number; color: string; center?: boolean; step?: number}> = ({text, delay, size, color, center, step = 3}) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
   return (
