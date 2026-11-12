@@ -108,7 +108,7 @@ const TopBar: React.FC<{date: string; active: number; total: number; progress: n
       <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
         <div style={{display: 'flex', alignItems: 'center', fontFamily: HEAD, fontSize: 64}}>
           <span style={{background: C.yellow, color: C.ink, padding: '0 18px', borderRadius: 12,
-            transform: `rotate(${-3 + bob}deg) translateY(${bob}px)`, display: 'inline-block', letterSpacing: 2}}>SEKILAS</span>
+            transform: `rotate(${-3 + bob}deg) translateY(${bob}px)`, display: 'inline-block', letterSpacing: 2}}>GLANCE</span>
         </div>
         <div style={{display: 'flex', alignItems: 'center', gap: 12, fontFamily: BODY, fontWeight: 800, fontSize: 28, color: C.dim, letterSpacing: 2}}>
           <div style={{width: 16, height: 16, borderRadius: 8, background: C.red, opacity: 0.5 + 0.5 * Math.abs(Math.sin(f / 10))}} />
