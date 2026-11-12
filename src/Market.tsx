@@ -155,17 +155,17 @@ const IndexScene: React.FC<{c: Extract<Card, {type: 'index' | 'fx'}>}> = ({c}) =
     </Panel>
     {c.type === 'index' && c.breadth && <Breadth b={c.breadth} delay={44} />}
     {c.type === 'fx' && c.others && <Others rows={c.others} delay={44} />}
-    {c.note && <Note text={c.note} delay={56} />}
+    {c.note && <Note text={c.note} delay={56} top={c.type === 'fx' && c.others ? 1490 : 1420} />}
     <Burst at={38} x={540} y={1000} color={C.cyan} />
   </AbsoluteFill>
 );
 
-const Note: React.FC<{text: string; delay: number}> = ({text, delay}) => {
+const Note: React.FC<{text: string; delay: number; top?: number}> = ({text, delay, top = 1420}) => {
   const s = useSpr(delay, 8, 260);
   const f = useCurrentFrame();
   if (f < delay) return null;
   return (
-    <div style={{position: 'absolute', top: 1420, left: 70, right: 70, transformOrigin: 'left center', opacity: Math.min(1, s * 2),
+    <div style={{position: 'absolute', top, left: 70, right: 70, transformOrigin: 'left center', opacity: Math.min(1, s * 2),
       transform: `scale(${interpolate(s, [0, 1], [1.6, 1])}) rotate(${interpolate(s, [0, 1], [-8, -1.5])}deg)`}}>
       <div style={{fontFamily: BODY, fontWeight: 900, fontSize: 46, lineHeight: 1.15, color: C.white}}>{text}</div>
     </div>

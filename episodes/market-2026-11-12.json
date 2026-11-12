@@ -1,0 +1,12 @@
+{
+  "id": "market-2026-11-12",
+  "date": "KHAMIS · 12 NOV 2026",
+  "hook": {"kicker": "PASARAN HARI NI", "big": "4 HARI", "sub": "BURSA MERAH BERTURUT-TURUT"},
+  "cards": [
+    {"type": "index", "tag": "BURSA MALAYSIA", "title": "FBM KLCI", "move": {"value": 1585.96, "change": -9.23, "changePct": -0.58}, "breadth": {"up": 318, "down": 799, "flat": 476}, "note": "Jatuh 4 sesi berturut-turut"},
+    {"type": "fx", "tag": "RINGGIT", "title": "USD / MYR", "move": {"value": 4.0800, "change": 0.0065, "decimals": 4}, "convertLabel": "RM1,000 =", "convertValue": "US$245", "others": [{"label": "SGD", "value": "3.18"}, {"label": "EUR", "value": "4.53"}, {"label": "100 JPY", "value": "2.56"}], "note": "Ringgit lemah sedikit berbanding USD"},
+    {"type": "story", "tag": "KENAPA?", "headline": "Kenapa Bursa jatuh 4 hari?", "lines": ["Inflasi AS lebih tinggi dari jangkaan", "Pasaran jangka Fed naikkan kadar faedah Disember", "Penganalisis kata dana asing terus menjual"], "impact": "Pasaran dijangka terus berhati-hati dalam jangka pendek"}
+  ],
+  "outro": {"question": "Bursa naik balik minggu depan?"},
+  "sources": ["Bernama", "BNM", "BusinessToday"]
+}
