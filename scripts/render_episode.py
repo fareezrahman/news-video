@@ -8,7 +8,7 @@ Sets each segment's audio + durationSec from the real file length so captions an
 match the speech, renders the video, then makes a phone-sized copy.
 Output: out/<id>.mp4 and out/<id>_phone.mp4
 """
-import json, pathlib, subprocess, sys, tempfile
+import json, os, pathlib, subprocess, sys, tempfile
 
 root = pathlib.Path(__file__).resolve().parent.parent
 ep_path = pathlib.Path(sys.argv[1]).resolve()
@@ -31,7 +31,11 @@ with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as t:
     props = t.name
 
 full, phone = out / f"{ep_id}.mp4", out / f"{ep_id}_phone.mp4"
-subprocess.check_call(["npx", "remotion", "render", "src/index.ts", "Glance", str(full), f"--props={props}"], cwd=root)
+browser = os.environ.get("REMOTION_BROWSER")
+cmd = ["npx", "remotion", "render", "src/index.ts", "Glance", str(full), f"--props={props}"]
+if browser:
+    cmd.append(f"--browser-executable={browser}")
+subprocess.check_call(cmd, cwd=root)
 subprocess.check_call(["ffmpeg", "-y", "-loglevel", "error", "-i", str(full), "-c:v", "libx264", "-preset", "veryfast",
     "-crf", "24", "-maxrate", "6M", "-bufsize", "12M", "-pix_fmt", "yuv420p", "-movflags", "+faststart",
     "-c:a", "aac", "-b:a", "128k", str(phone)])
