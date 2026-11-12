@@ -38,5 +38,5 @@ if browser:
 subprocess.check_call(cmd, cwd=root)
 subprocess.check_call(["ffmpeg", "-y", "-loglevel", "error", "-i", str(full), "-c:v", "libx264", "-preset", "veryfast",
     "-crf", "24", "-maxrate", "6M", "-bufsize", "12M", "-pix_fmt", "yuv420p", "-movflags", "+faststart",
-    "-c:a", "aac", "-b:a", "128k", str(phone)])
+    "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-c:a", "aac", "-b:a", "160k", str(phone)])
 print(f"done: {phone}")
