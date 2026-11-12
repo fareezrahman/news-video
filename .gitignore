@@ -1,4 +1,5 @@
 node_modules/
 out/
-public/ep*/
+public/*/
+episodes/test.json
 *.log

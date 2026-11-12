@@ -1,19 +1,19 @@
 import React from 'react';
-import {Composition, getInputProps} from 'remotion';
+import {Composition} from 'remotion';
 import {Episode, EpisodeData, totalFrames, FPS} from './Episode';
 import ep1 from '../episodes/ep1.json';
 
-const input = getInputProps() as {episode?: EpisodeData};
-const data: EpisodeData = (input.episode ?? ep1) as EpisodeData;
+const sample = ep1 as unknown as EpisodeData;
 
 export const Root: React.FC = () => (
   <Composition
-    id="Berita60"
+    id="Glance"
     component={Episode}
-    durationInFrames={totalFrames(data)}
     fps={FPS}
     width={1080}
     height={1920}
-    defaultProps={{data}}
+    durationInFrames={totalFrames(sample)}
+    defaultProps={{data: sample}}
+    calculateMetadata={({props}) => ({durationInFrames: totalFrames(props.data)})}
   />
 );
