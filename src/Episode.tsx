@@ -297,7 +297,7 @@ const CompareCard: React.FC<{c: Extract<Card, {kind: 'compare'}>; start: number}
           <span style={{fontFamily: HEAD, fontSize: 72, lineHeight: 1, color, transform: `scale(${pulse})`, display: 'inline-block'}}>{fmt(value * count)}</span>
         </div>
         <div style={{height: 40, borderRadius: 20, background: 'rgba(255,255,255,0.12)', marginTop: 10}}>
-          <div style={{width: `${(value / max) * 100 * t}%`, height: '100%', borderRadius: 20, background: color,
+          <div style={{width: `${Math.min(100, (value / max) * 100 * t)}%`, height: '100%', borderRadius: 20, background: color,
             backgroundImage: 'repeating-linear-gradient(-45deg, rgba(255,255,255,0.25) 0 14px, transparent 14px 28px)',
             backgroundPosition: `${f * 2}px 0`}} />
         </div>
