@@ -14,3 +14,10 @@ Renders a 1080x1920 TikTok news video from one episode file.
 4. Compress for phone: `ffmpeg -i out/episode.mp4 -c:v libx264 -preset veryfast -crf 24 -maxrate 6M -bufsize 12M -pix_fmt yuv420p -movflags +faststart -c:a aac -b:a 128k out/episode_phone.mp4`
 
 Needs ffmpeg and a Chromium/Chrome on the machine (see `remotion.config.ts`).
+
+## HyperFrames (installed 13 Nov 2026)
+HTML-to-video framework by HeyGen, for one-off or new-format videos. The daily Glance videos still use Remotion (`src/`).
+- Agent skills: `.claude/skills/` (hyperframes, hyperframes-cli, hyperframes-registry, media-use, remotion-to-hyperframes, slideshow, style-sampling, reverse-any-video, figma). Update: `npx skills add heygen-com/hyperframes --agent claude-code -y`
+- CLI: `npm install -g hyperframes` (Node 22+, ffmpeg)
+- New vertical project: `hyperframes init <name> --non-interactive --resolution=portrait`
+- Render: `HYPERFRAMES_BROWSER_PATH=<path to chrome-headless-shell> hyperframes render`
