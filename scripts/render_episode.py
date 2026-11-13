@@ -12,6 +12,11 @@ import json, os, pathlib, subprocess, sys, tempfile
 
 root = pathlib.Path(__file__).resolve().parent.parent
 ep_path = pathlib.Path(sys.argv[1]).resolve()
+# sync captions to the voice (adds wordStarts); falls back to estimated timing if it fails
+try:
+    subprocess.check_call([sys.executable, str(root / "scripts" / "align_captions.py"), str(ep_path)])
+except Exception as e:
+    print(f"warning: caption alignment failed ({e}); captions will use estimated timing")
 data = json.loads(ep_path.read_text())
 ep_id = data["id"]
 
