@@ -38,6 +38,7 @@ type Seg = {
   kicker?: string; big?: string; sub?: string;
   n?: number; tag?: string; headline?: string; card?: Card; impact?: string;
   question?: string;
+  wordStarts?: number[]; // seconds from segment start, one per caption word (from speech alignment)
 };
 export type EpisodeData = {id: string; date: string; segments: Seg[]; sources: string[]};
 
@@ -147,7 +148,7 @@ const buildChunks = (text: string) => {
   return chunks;
 };
 
-const Captions: React.FC<{text: string; frames: number}> = ({text, frames}) => {
+const Captions: React.FC<{text: string; frames: number; starts?: number[]}> = ({text, frames, starts}) => {
   const f = useCurrentFrame();
   const chunks = buildChunks(text);
   // time per word by character length (+ pause after punctuation)
@@ -155,7 +156,11 @@ const Captions: React.FC<{text: string; frames: number}> = ({text, frames}) => {
   const total = flat.reduce((a, b) => a + b.weight, 0);
   const usable = frames - 10;
   let acc = 0;
-  const timed = flat.map((x) => { const s = (acc / total) * usable; acc += x.weight; return {...x, start: s}; });
+  const synced = !!starts && starts.length === flat.length;
+  // real word timings from the voice when available, else estimate by character length
+  const timed = synced
+    ? flat.map((x, i) => ({...x, start: Math.max(0, starts![i] * FPS - 2)}))
+    : flat.map((x) => { const s = (acc / total) * usable; acc += x.weight; return {...x, start: s}; });
   let cur = timed.findIndex((t, i) => f >= t.start && (i === timed.length - 1 || f < timed[i + 1].start));
   if (cur < 0) cur = 0;
   const chunkIdx = timed[cur].ci;
@@ -448,7 +453,7 @@ export const Episode: React.FC<{data: EpisodeData}> = ({data}) => {
             {s.type === 'hook' && <Hook s={s} />}
             {s.type === 'story' && <Story s={s} frames={len} total={stories} />}
             {s.type === 'outro' && <Outro s={s} />}
-            <Captions text={s.caption} frames={len} />
+            <Captions text={s.caption} frames={len} starts={s.wordStarts} />
             {i > 0 && <Wipe />}
           </Series.Sequence>
         ))}
